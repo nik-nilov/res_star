@@ -1,0 +1,21 @@
+---
+- name: install keepalived
+  hosts: lb_servers
+  tasks:
+  - name: "Install keepalived"
+    apt:
+      name: "keepalived"
+      state: present
+  - template:
+      src: keepalived.conf.j2
+      dest: /etc/keepalived/keepalived.conf
+  
+  - name: start keepalived
+    service:
+      name: "keepalived"
+      state: restarted 
+      
+  - name: "Install net-tools"
+    apt:
+      name: "net-tools"
+      state: present

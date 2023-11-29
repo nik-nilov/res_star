@@ -1,0 +1,40 @@
+Переходим в корневую директорию проекта.
+Запускаем команду "docker-compose build"
+Запускаем команду "docker-compose up -d"
+Выводим список запущенных контейнеров командой "docker-compose ps"
+Заходим на контейнер уаправление "docker exec -it ansible /bin/bash"
+Командой ls выводим список файлов, нас интересуют:apache.yaml  haproxy.yaml  keepalived.yaml
+Запускаем плейбуки в любом порядке,дожидаясь цспешного выполнения каждого
+"ansible-playbook apache.yaml"
+"ansible-playbook haproxy.yaml"
+"ansible-playbook keepalived.yaml"
+Выходим из контейнера командой "exit"
+После выполненных действий, все сервисы подняты, настроен виртуальный ip 10.168.1.15
+Опционально можно добавить запись в файл hosts,на машине на которой установлен докер
+10.168.1.15 viplb
+Для определения на какой ноде(lb1 или lb2) висит виртуальный ip  заходим на каждую
+"docker exec -it lb1 /bin/bash"
+вводим "ip a" , получаем вывод вида:
+*************************************************************************************************
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+139: eth0@if140: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default 
+    link/ether 02:42:0a:a8:01:0d brd ff:ff:ff:ff:ff:ff link-netnsid 0
+    inet 10.168.1.13/24 brd 10.168.1.255 scope global eth0
+       valid_lft forever preferred_lft forever
+    inet 10.168.1.15/32 scope global eth0
+       valid_lft forever preferred_lft forever
+ ************************************************************************************************
+В данном случае мы сразу попадаем на активную ноду в силу настроек его конфигурации мастер сервера,
+но ключевой информацией является наличие виртуального адреса на адаптере:
+inet 10.168.1.15/32 scope global eth0
+
+Если произвести теже действия на другой ноде:вывод будет отличаться отсуствием данного ip адреса.
+
+Итак, мы определили активную ноду, теперь ставим данный контенер на паузу.
+Выходим из текущего контейнера командой "exit"
+Выполним команду "docker container stop lb1"
+В браузере машины,на которой устанволен докер (предпологается станция с графическим интерфейсом) вводим "10.168.1.15/" или "viplb/" -при опциональной настройке
+Будет вывод вида " Welcome TO backend1 "  или " Welcome TO backend2 "

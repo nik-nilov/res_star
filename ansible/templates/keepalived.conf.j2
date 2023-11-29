@@ -1,0 +1,22 @@
+! Configuration File for keepalived
+
+global_defs {
+  router_id GOOD_HOST
+ }
+
+vrrp_instance VI_1 {
+    state {{ STATE }}
+	interface eth0
+	virtual_router_id 23
+	priority {{ VRID }}
+	advert_int 1
+	authentication {
+	     auth_type PASS
+		 auth_pass 12345678
+	}
+    virtual_ipaddress {
+        10.168.1.15
+
+
+	}
+}	

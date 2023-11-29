@@ -1,0 +1,27 @@
+---
+- name: "HAProxy install"
+  hosts: lb_servers
+  tasks:
+  - name: "HAProxy install"
+    apt:
+      name: "haproxy"
+      state: present
+  - template:
+      src: haproxy.cfg.j2
+      dest: /etc/haproxy/haproxy.cfg
+  #notify: restart haproxy
+
+  - name: start haproxy
+    service:
+      name: "haproxy"
+      state: restarted    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    

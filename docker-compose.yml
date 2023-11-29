@@ -1,0 +1,71 @@
+version: '3'
+services:
+  ansible:
+    container_name: ansible
+    build: ./ansible
+    hostname: ansible
+    tty: true
+    networks:
+      - nicenetwork
+
+
+  backend1:
+    container_name: backend1
+    build: ./backend1
+    hostname: backend1 
+    tty: true
+    networks:
+       nicenetwork:
+          ipv4_address: 10.168.1.11
+          aliases:
+          - web2.nice.try
+  backend2:
+    container_name: backend2
+    build: ./backend2
+    hostname: backend2
+    tty: true
+    networks:
+        nicenetwork:
+          ipv4_address: 10.168.1.12
+          aliases:
+          - web1.nice.try
+  lb1:
+    container_name: lb1
+    build: ./lb1
+    hostname: lb1
+    privileged: true
+    environment:
+      SYSCTL_KEY: net.ipv4.ip_nonlocal_bind
+      SYSCTL_VALUE: 1
+    tty: true
+    networks:
+        nicenetwork:
+          ipv4_address: 10.168.1.13
+          aliases:
+          - web1.nice.try          
+
+  lb2:
+    container_name: lb2
+    build: ./lb2
+    hostname: lb2
+    privileged: true
+    environment:
+      SYSCTL_KEY: net.ipv4.ip_nonlocal_bind
+      SYSCTL_VALUE: 1
+    tty: true
+    networks:
+        nicenetwork:
+          ipv4_address: 10.168.1.14
+          aliases:
+          - web1.nice.try 
+
+
+networks:
+  nicenetwork:
+    driver : bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.168.1.0/24    
+    
+    

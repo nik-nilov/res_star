@@ -1,0 +1,13 @@
+[backend_servers]
+backend1 ansible_host=10.168.1.11 hostname=backend1
+backend2 ansible_host=10.168.1.12 hostname=backend2
+[lb_servers]
+lb1 ansible_host=10.168.1.13 STATE=MASTER VRID=100 hostname=lb1
+lb2 ansible_host=10.168.1.14 STATE=BACKUP VRID=50 hostname=lb2
+
+
+
+
+
+
+
