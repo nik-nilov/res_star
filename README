@@ -2,9 +2,9 @@
 Запускаем команду "docker-compose build"
 Запускаем команду "docker-compose up -d"
 Выводим список запущенных контейнеров командой "docker-compose ps"
-Заходим на контейнер уаправление "docker exec -it ansible /bin/bash"
+Заходим на контейнер управление "docker exec -it ansible /bin/bash"
 Командой ls выводим список файлов, нас интересуют:apache.yaml  haproxy.yaml  keepalived.yaml
-Запускаем плейбуки в любом порядке,дожидаясь цспешного выполнения каждого
+Запускаем плейбуки в любом порядке,дожидаясь успешного выполнения каждого
 "ansible-playbook apache.yaml"
 "ansible-playbook haproxy.yaml"
 "ansible-playbook keepalived.yaml"
